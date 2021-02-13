@@ -10,7 +10,6 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
@@ -26,10 +25,6 @@ public class Chat2BouyomiTCP {
 	@SubscribeEvent
 	public void onServerChat(ServerChatEvent event) {
 		send(event.getMessage());
-	}
-
-	public static void bouyomi(String message) {
-
 	}
 
 	public static void send(String message) {
@@ -59,8 +54,12 @@ public class Chat2BouyomiTCP {
 			e.printStackTrace();
 		} finally {
 			try {
-				socket.close();
-				out.close();
+				if (socket != null) {
+					socket.close();
+				}
+				if (out != null) {
+					out.close();
+				}
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
