@@ -5,7 +5,7 @@ license = "MIT"
 
 [[mods]]
     modId = "chat2bouyomitcp"
-    version = "0.1.0"
+    version = "1.0.0"
     displayName = "Chat 2 Bouyomi TCP"
     authors = "AAAR Salmon"
     description = "Make Bouyomi-chan read chattings by using TCP/IP connection."

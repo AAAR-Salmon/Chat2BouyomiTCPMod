@@ -1,9 +1,14 @@
 package aaarsalmon;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.MinecraftGame;
+import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -14,24 +19,31 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
 
-@Mod("chat2bouyomitcp")
+@Mod(Chat2BouyomiTCP.MODID)
 public class Chat2BouyomiTCP {
-	private static final Logger LOGGER = LogManager.getLogger();
+	public static final String MODID = "chat2bouyomitcp";
+	public static final String MODNAME = "Chat 2 Bouyomi TCP";
+	private static final Logger LOGGER = LogManager.getLogger(MODNAME);
 
 	public Chat2BouyomiTCP() {
 		MinecraftForge.EVENT_BUS.register(this);
+		ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, Config.SPEC);
 	}
 
 	@SubscribeEvent
 	public void onServerChat(ServerChatEvent event) {
-		send(event.getMessage());
+		if (Config.ENABLE.get()) {
+			send(event.getMessage());
+		}
 	}
 
 	public static void send(String message) {
 		Socket socket = null;
 		OutputStream out = null;
+		String host = Config.HOST.get();
+		int port = Config.PORT.get();
 		try {
-			socket = new Socket("127.0.0.1", 50001);
+			socket = new Socket(host, port);
 			out = socket.getOutputStream();
 
 			byte[] messageData = message.getBytes(StandardCharsets.UTF_8);
