@@ -1,8 +1,5 @@
 package aaarsalmon;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.MinecraftGame;
-import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -23,7 +20,8 @@ import java.nio.charset.StandardCharsets;
 public class Chat2BouyomiTCP {
 	public static final String MODID = "chat2bouyomitcp";
 	public static final String MODNAME = "Chat 2 Bouyomi TCP";
-	private static final Logger LOGGER = LogManager.getLogger(MODNAME);
+	public static final Logger LOGGER = LogManager.getLogger(MODNAME);
+	private static boolean stopped = false;
 
 	public Chat2BouyomiTCP() {
 		MinecraftForge.EVENT_BUS.register(this);
@@ -32,12 +30,12 @@ public class Chat2BouyomiTCP {
 
 	@SubscribeEvent
 	public void onServerChat(ServerChatEvent event) {
-		if (Config.ENABLE.get()) {
-			send(event.getMessage());
+		if (Config.ENABLE.get() && !getStopped()) {
+			sendBouyomi(event.getMessage());
 		}
 	}
 
-	public static void send(String message) {
+	public void sendBouyomi(String message) {
 		Socket socket = null;
 		OutputStream out = null;
 		String host = Config.HOST.get();
@@ -64,18 +62,28 @@ public class Chat2BouyomiTCP {
 			socket.close();
 		} catch (IOException e) {
 			e.printStackTrace();
-		} finally {
 			try {
-				if (socket != null) {
-					socket.close();
-				}
 				if (out != null) {
 					out.close();
 				}
-			} catch (IOException e) {
-				e.printStackTrace();
+				if (socket != null) {
+					socket.close();
+				}
+			} catch (IOException e2) {
+				e2.printStackTrace();
 			}
+			LOGGER.error("Connection to Bouyomi-chan failed.");
+			setStopped(true);
+			LOGGER.info("Sending to Bouyomi-chan was turned off.");
+			LOGGER.info("Please execute `/bouyomi on` if you want to restart.");
 		}
+	}
 
+	public static void setStopped(boolean bool) {
+		stopped = bool;
+	}
+
+	public static boolean getStopped() {
+		return stopped;
 	}
 }

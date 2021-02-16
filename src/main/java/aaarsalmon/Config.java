@@ -13,7 +13,7 @@ public class Config {
 
 		BUILDER.push("System");
 		ENABLE = BUILDER
-			.translation("configGui.chat2bouyomi.enabled")
+			.translation("configGui.chat2bouyomi.enable")
 			.define("Enable", true);
 		BUILDER.pop();
 
