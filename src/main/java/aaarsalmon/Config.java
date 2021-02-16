@@ -30,5 +30,4 @@ public class Config {
 
 		SPEC = BUILDER.build();
 	}
-
 }

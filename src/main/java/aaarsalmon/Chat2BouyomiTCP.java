@@ -1,6 +1,12 @@
 package aaarsalmon;
 
+import aaarsalmon.commands.TurnOff;
+import aaarsalmon.commands.TurnOn;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import net.minecraft.command.CommandSource;
+import net.minecraft.command.Commands;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -33,6 +39,14 @@ public class Chat2BouyomiTCP {
 		if (Config.ENABLE.get() && !getStopped()) {
 			sendBouyomi(event.getMessage());
 		}
+	}
+
+	@SubscribeEvent
+	public void registerCommands(RegisterCommandsEvent event) {
+		LiteralArgumentBuilder<CommandSource> builder = Commands.literal("bouyomi")
+			.then(TurnOn.register())
+			.then(TurnOff.register());
+		event.getDispatcher().register(builder);
 	}
 
 	public void sendBouyomi(String message) {
