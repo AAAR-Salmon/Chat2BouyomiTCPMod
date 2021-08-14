@@ -1,0 +1,25 @@
+modLoader = "javafml"
+loaderVersion = "[37,)"
+showAsResourcePack = false
+license = "MIT"
+
+[[mods]]
+    modId = "chat2bouyomitcp"
+    version = "1.0-RC1"
+    displayName = "Chat 2 Bouyomi TCP"
+    authors = "AAAR Salmon"
+    description = "Make Bouyomi-chan read chattings by using TCP/IP connection."
+
+[[dependencies.examplemod]] #optional
+    modId = "forge"
+    mandatory = true
+    versionRange = "[37,)"
+    ordering = "NONE"
+    side = "BOTH"
+
+[[dependencies.examplemod]]
+    modId = "minecraft"
+    mandatory = true
+    versionRange = "[1.17.1,)"
+    ordering = "NONE"
+    side = "BOTH"
